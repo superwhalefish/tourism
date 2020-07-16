@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+<meta charset="UTF-8">
+<title>图片管理</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<link rel="stylesheet" href="css/tabletype.css" />
+<script type="text/javascript" src="./lib/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<script src="js/jquery.min.js"></script>
+</head>
+<body>
+	<div class="x-nav">
+		<span class="layui-breadcrumb"> <a href="">首页</a> <a href="">演示</a>
+			<a> <cite>导航元素</cite></a>
+		</span> <a class="layui-btn layui-btn-small"
+			style="line-height: 1.6em; margin-top: 3px; float: right"
+			onclick="location.reload()" title="刷新"> <i
+			class="layui-icon layui-icon-refresh" style="line-height: 30px"></i></a>
+	</div>
+	<div class="layui-fluid">
+		<div class="layui-row layui-col-space15">
+			<div class="layui-col-md12">
+				<div class="layui-card">
+					<div class="layui-card-body">
+						<table id="demo" lay-filter="test"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 	图片上传 -->
+	
+	<div id="addImages" hidden="hidden" class="layui-form" lay-filter="selFilter">
+	<form id="myform">
+		<table>
+			<tr>
+				<td><p style="font-size: 20px; color: red;">景区标题</p></td>
+				<td>
+					<div class="layui-input-inline layui-form" lay-filter="selFilter">
+						<select name="name" id="imgname" lay-verify="required"
+							style="width: 200px; height: 30px; border-color: blue; font-size: 20px">
+							<option value="">--请选择景区标题--</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="layui-upload">
+						<button type="button" class="layui-btn" id="test1">上传图片</button>
+						<div class="layui-upload-list">
+							<img class="layui-upload-img" id="demo1">
+							<p id="demoText"></p>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+	
+	<script type="text/javascript">
+		function add() {
+			layui.use([ "layer", "form", "table" ], function() {
+				var form=layui.form;
+			    $("#imgname").empty();
+			    form.render("select")
+				$.post("/LY/getSceneryAll", {}, function(res) {
+					$.each(res, function(index, item) {  
+						  form.render("select")
+						var its = '<option value="' + item.imgcode + '">'+ item.name + '</option>';
+						$("#imgname").append(its);
+					});
+				}, "json")
+
+				layer.open({
+					type : 1,
+					offset : 'auto',
+					area : [ '500px', '500px' ],
+					content : $("#addImages"),
+					btn : [ "提交", "关闭" ],
+					yes : function() {
+						close();
+					},
+					btn2 : function() {
+						close();
+					}
+				});
+				uploadsubmit();
+			});
+		}
+		function uploadsubmit() {
+			layui
+					.use(
+							[ "layer", "form", "table", "upload" ],
+							function() {
+								var upload = layui.upload;
+								var table = layui.table;
+								var uploadInst = upload
+										.render({
+											elem : '#test1',
+											url : '/LY/addImgs' //改成您自己的上传接口
+											,
+											accept : "images",
+											size : 5000,
+											data : {
+												imgcode : function() {
+													return $("#imgname").val();
+												}
+											},
+											before : function(obj) {
+												//预读本地文件示例，不支持ie8
+												obj.preview(function(index,
+														file, result) {
+													$('#demo1').attr('src',
+															result); //图片链接（base64）
+												});
+											},
+											done : function(res) {
+												//如果上传失败
+												if (res.code > 0) {
+													return layer.msg("请选择一个标题");
+												}
+												//上传成功
+												var demoText = $('#demoText');
+												table.reload("imgTab");
+												demoText
+														.html('<span style="color: #4cae4c;">上传成功</span>');
+
+												var fileupload = $(".images");
+												fileupload.attr("value",
+														res.data.src);
+												console.log(fileupload
+														.attr("value"));
+												location.reload(); 
+											},
+											error : function() {
+												//演示失败状态，并实现重传
+												var demoText = $('#demoText');
+												demoText
+														.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+												demoText
+														.find('.demo-reload')
+														.on(
+																'click',
+																function() {
+																	uploadInst
+																			.upload();
+																});
+											}
+										});
+
+							})
+
+		}
+	</script>
+
+	<script type="text/html" id="toolbar">
+			图片编号：
+			<div class="layui-input-inline">
+				<input type="text" id="search_imgcode" value="" lay-verify="required|number" autocomplete="off" class="layui-input">
+			</div>
+			图片标题：
+			<div class="layui-input-inline">
+				<input type="text" id="search_name" value="" lay-verify="required|number" autocomplete="off" class="layui-input">
+			</div>
+			<a class='layui-btn layui-btn-radius layui-btn-normal' onclick='init()'>搜索</a>
+			<a class='layui-btn layui-btn-radius layui-btn-normal' onclick='add()'>添加</a>
+		</script>
+		<script type="text/html" id="istuijiantemplet">
+		<input type="checkbox" name="open" value="{{d.istuijian}}" lay-skin="switch" lay-text="yes||no " lay-filter="switchptstatus" {{ d.istuijian==1 ? 'checked' : '' }} data-id="{{d.id}}">
+	</script>
+<script>
+		function del(id) {
+			var table = layui.table;
+			layer.msg("确认删除？", {
+				time : 5000, //20s后自动关闭
+				btn : [ "删除", "取消" ],
+				area : [ '200px', '100px' ],
+				yes : function() {
+					$.post("/LY/delImgByid", {
+						id : id
+					}, function(res) {
+						if (res > 0) {
+							layer.msg("删除成功")
+							table.reload("imgTab");
+						} else {
+							table.reload("imgTab");
+							layer.msg("删除失败");
+						}
+					}, "json")
+				}
+			});
+		}
+
+		function close() {
+			layui.use([ "layer", "form", "table" ], function() {
+				layer.closeAll();
+			})
+
+		}
+
+		$(function() {
+			init();
+		});
+		function init() {
+			layui
+					.use(
+							[ 'laydate', 'form', 'table' ],
+							function() {
+								var table = layui.table;
+								var form = layui.form;
+								table
+										.render({
+											elem : '#demo',
+											toolbar : "#toolbar",
+											id : "imgTab",
+											loading : true,
+											page : true,
+											method : "post",
+											url : "/LY/getImages",
+											height : 500 //容器高度
+											,
+											where : {
+												name : $("#search_name").val(),
+												imgcode : $("#search_imgcode")
+														.val()
+											},
+											cols : [ [
+													{
+														field : 'id',
+														title : 'ID',
+														width : 80
+													},
+													{
+														field : 'name',
+														title : '标题',
+														width : 120,
+														templet : "<div>{{d.scenery.name}}</div>"
+													},
+													{
+														field : 'imgcode',
+														title : '图片编码',
+														width : 140
+													},
+													{
+														field:'istuijian',
+														title:'是否推为轮播',
+														width:120,
+														templet:'#istuijiantemplet'
+													},
+													{
+														field : 'imgurl',
+														title : '图片',
+														width : 140,
+														templet : "<div><img  src='path/{{d.imgurl}}' alt='50'/></div>"
+													},
+													{
+														field : "asd",
+														title : "操作",
+														width : 90,
+														templet : function(d) {
+															return "<a class='layui-btn layui-btn-radius layui-btn-normal'onclick='del("
+																	+ d.id
+																	+ ")' >删除</a>"
+														}
+													} ] ],
+											limit : 10,
+											limits : [ 10, 20, 30 ]
+										})
+										
+										
+										
+										form.on("switch(switchptstatus)", function(data) {
+											var selectIfKey = data.othis;
+											var parentTr = selectIfKey.parents("tr");
+											var id = $(parentTr).find("td:eq(0)").find(
+													".layui-table-cell").text();
+											if (data.elem.checked == true) {
+												$.post("/LY/editImage", {
+													id : id,
+													istuijian : 1
+												}, function(res) {
+													if (res > 0) {
+														table.reload("imgTab");
+														layer.msg("已设置为轮播图");
+
+													} else {
+														table.reload("imgTab");
+														layer.msg("处理异常");
+													}
+
+												}, "json")
+											} else {
+												$.post("/LY/editImage", {
+													id : id,
+													istuijian : 2
+												}, function(res) {
+													if (res > 0) {
+														table.reload("imgTab");
+														layer.msg("已取消");
+													} else {
+														table.reload("imgTab");
+														layer.msg("取消失败.");
+
+													}
+												}, "json")
+											}
+										});
+										
+										
+							});
+
+		
+
+		}
+	</script>
+</body>
+
+</html>

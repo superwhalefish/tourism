@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+<meta charset="UTF-8">
+<title>商品管理</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<link rel="stylesheet" href="css/tabletype.css" />
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.min.js"></script>
+<script src="./lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<script src="js/jquery.min.js"></script>
+
+</head>
+
+<body>
+	<div class="x-nav">
+		<span class="layui-breadcrumb"> <a href="">首页</a> <a href="">演示</a>
+			<a> <cite>导航元素</cite></a>
+		</span> <a class="layui-btn layui-btn-small"
+			style="line-height: 1.6em; margin-top: 3px; float: right"
+			onclick="location.reload()" title="刷新"> <i
+			class="layui-icon layui-icon-refresh" style="line-height: 30px"></i></a>
+	</div>
+	<div class="layui-fluid">
+		<div class="layui-row layui-col-space15">
+			<div class="layui-col-md12">
+				<div class="layui-card">
+
+					<div class="layui-card-body ">
+						<form class="layui-form">
+							<table id="demo" lay-filter="test"></table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 文本编辑框 -->
+
+	<div id="editpro" hidden="hidden">
+		<table>
+			<tr>
+				<td colspan="2">景点标题</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="align-content:"><textarea rows="3"
+						cols="50" id="editname"></textarea></td>
+			</tr>
+			<tr>
+				<td>推荐月份 ：
+					<div class="layui-input-inline">
+						<select id="editmonth" lay-verify="required">
+							<option value="">--请选择--</option>
+							<option value="一月">--一月--</option>
+							<option value="二月">--二月--</option>
+							<option value="三月">--三月--</option>
+							<option value="四月">--四月--</option>
+							<option value="五月">--五月--</option>
+							<option value="六月">--六月--</option>
+							<option value="七月">--七月--</option>
+							<option value="八月">--八月--</option>
+							<option value="九月">--九月--</option>
+							<option value="十月">--十月--</option>
+							<option value="十一月">--十一月--</option>
+							<option value="十二月">--十二月--</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>景点节日:<input type="text" id="editholiday" value=""
+					placeholder="请输入景点节日">
+				</td>
+			</tr>
+			<tr>
+				<td>相关产物:<input type="text" id="editaddress" value=""
+					placeholder="请输入相关产物">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">文本描述</td>
+			</tr>
+			<tr>
+				<td colspan="2""><textarea rows="29" cols="90" id="editcontent"></textarea></td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 添加框 -->
+	<div id="addscenery" hidden="hidden">
+		<table>
+			<tr>
+				<td>类别
+					<div  class="layui-input-inline layui-form" lay-filter="selFilter">
+						<select name="cate" id="getcate" lay-verify="required">
+							<option value="">--请选择--</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">景点标题</td>
+			</tr>
+			<tr>
+				<td colspan="2"><textarea rows="3" cols="50" id="addname"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>推荐月份 ：
+					<div class="layui-input-inline">
+						<select id="addmonth" name="addmonth" lay-verify="required">
+							<option value="">--请选择--</option>
+							<option value="一月">--一月--</option>
+							<option value="二月">--二月--</option>
+							<option value="三月">--三月--</option>
+							<option value="四月">--四月--</option>
+							<option value="五月">--五月--</option>
+							<option value="六月">--六月--</option>
+							<option value="七月">--七月--</option>
+							<option value="八月">--八月--</option>
+							<option value="九月">--九月--</option>
+							<option value="十月">--十月--</option>
+							<option value="十一月">--十一月--</option>
+							<option value="十二月">--十二月--</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>相关产物:<input type="text" id="addholiday" value=""
+					placeholder="请输入相关产物">
+				</td>
+			</tr>
+			<tr>
+				<td>景点地区:<input type="text" id="addaddress" value=""
+					placeholder="请输入景点地区">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">文本描述</td>
+			</tr>
+			<tr>
+				<td colspan="2""><textarea rows="29" cols="90" id="addcontent"></textarea></td>
+			</tr>
+		</table>
+
+	</div>
+
+	<!-- 图片框 -->
+
+	<div id="uploadadd" hidden="hidden" class="layui-form" lay-filter="selFilter">
+		<input type="text" hidden="hidden" id="sceneryid">
+		<div class="layui-upload">
+			<button type="button" class="layui-btn" id="test1">上传图片</button>
+			<div class="layui-upload-list">
+				<img class="layui-upload-img" id="demo1">
+				<p id="demoText"></p>
+			</div>
+		</div>
+		<script type="text/javascript">
+			layui
+					.use(
+							[ 'upload', 'table' ],
+							function() {
+								var $ = layui.jquery, upload = layui.upload;
+								var table = layui.table;
+								//普通图片上传
+								var uploadInst = upload
+										.render({
+											elem : '#test1',
+											url : '/LY/uploadSceneryImages' //改成您自己的上传接口
+											,
+											accept : "images",
+											size : 5000,
+											data : {
+												id : function() {
+													return $("#sceneryid")
+															.val();
+												}
+											},
+											before : function(obj) {
+												//预读本地文件示例，不支持ie8
+												obj.preview(function(index,
+														file, result) {
+													$('#demo1').attr('src',
+															result); //图片链接（base64）
+												});
+											},
+											done : function(res) {
+												//如果上传失败
+												if (res.code > 0) {
+													return layer.msg('上传失败');
+												}
+												//上传成功
+												var demoText = $('#demoText');
+												table.reload("protab");
+												demoText
+														.html('<span style="color: #4cae4c;">上传成功</span>');
+
+												var fileupload = $(".images");
+												fileupload.attr("value",
+														res.data.src);
+												console.log(fileupload
+														.attr("value"));
+											},
+											error : function() {
+												//演示失败状态，并实现重传
+												var demoText = $('#demoText');
+												demoText
+														.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+												demoText
+														.find('.demo-reload')
+														.on(
+																'click',
+																function() {
+																	uploadInst
+																			.upload();
+																});
+											}
+										});
+
+							});
+		</script>
+	</div>
+	<script>
+		function upload(id) {
+			document.getElementById("sceneryid").value = id;
+			layer.open({
+				type : 1,
+				offset : 'auto',
+				area : [ '610px', '600px' ],
+				content : $("#uploadadd"),
+				btn : [ "确定", "关闭" ],
+				yes : function() {
+					close();
+				},
+				btn2 : function() {
+					close();
+				}
+			});
+		}
+	</script>
+</body>
+<script type="text/html" id="toolbar">
+<form class="layui-form" action="" id="searchinit"  lay-filter="selFilter">
+		景点：
+		<div class="layui-input-inline">
+			<input type="text" id="sceneryname" value="" lay-verify="required|number" autocomplete="off" class="layui-input">
+		</div>
+		地区：
+		<div class="layui-input-inline">
+			<input type="text" id="sceneryaddress" value="" lay-verify="required|number" autocomplete="off" class="layui-input">
+		</div>
+		月份：
+		<div class="layui-input-inline">
+						<select id="scenerymonth" name="addmonth" lay-verify="required">
+							<option value="">--请选择--</option>
+							<option value="一月">--一月--</option>
+							<option value="二月">--二月--</option>
+							<option value="三月">--三月--</option>
+							<option value="四月">--四月--</option>
+							<option value="五月">--五月--</option>
+							<option value="六月">--六月--</option>
+							<option value="七月">--七月--</option>
+							<option value="八月">--八月--</option>
+							<option value="九月">--九月--</option>
+							<option value="十月">--十月--</option>
+							<option value="十一月">--十一月--</option>
+							<option value="十二月">--十二月--</option>
+						</select>
+		</div>
+		相关产物：
+		<div class="layui-input-inline">
+			<input type="text" id="sceneryholiday" value="" lay-verify="required|number" autocomplete="off" class="layui-input">
+		</div>
+<br/>
+		发布状态：
+						<div class="layui-input-inline">
+							<select id="publishstate" name="addmonth" lay-verify="required">
+							<option value="">--请选择--</option>
+							<option value="已发布">--已发布--</option>
+							<option value="未发布">--未发布--</option>
+							</select>
+						</div>
+
+		上传时间:
+		 <div class="layui-input-inline">
+      		  <input type="text" name="upstarttime" id="upstarttime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>~
+ 		<div class="layui-input-inline">
+      		  <input type="text" name="upendtime" id="upendtime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>
+<br/>
+上次发布时间:
+		 <div class="layui-input-inline">
+      		  <input type="text" name="publishstarttime" id="publishstarttime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>~
+ 		<div class="layui-input-inline">
+      		  <input type="text" name="publishendtime" id="publishendtime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>
+上次撤回发布时间:
+		 <div class="layui-input-inline">
+      		  <input type="text" name="unpublishstarttime" id="unpublishstarttime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>~
+ 		<div class="layui-input-inline">
+      		  <input type="text" name="unpublishendtime" id="unpublishendtime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>
+
+		<a class='layui-btn layui-btn-radius layui-btn-normal' onclick='init()'>搜索</a>
+	<a class='layui-btn layui-btn-radius layui-btn-normal' onclick='addscenery()'>添加</a>
+</form>
+	</script>
+<script type="text/html" id="scenerycontent">
+      <textarea class="layui-textarea" cols="30" rows="3"> {{d.content}}</textarea>
+</script>
+<script type="text/html" id="scenerysimg">
+<img src="path/{{d.simg}}"atl="50">
+</script>
+<script type="text/html" id="publishstateyouhua">
+		<input type="checkbox" name="open" value="{{d.publishstate}}" lay-skin="switch" lay-text="已发布|未发布 " lay-filter="switchptstatus" {{ d.publishstate=='已发布' ? 'checked' : '' }} data-id="{{d.id}}">
+	</script>
+<script>
+	function addsubmit() {
+		var cid = $("#getcate").val();
+		var name = $("#addname").val();
+		var content = $("#addcontent").val();
+		var address = $("#addaddress").val();
+		var holiday = $("#addholiday").val();
+		var month = $("#addmonth").val();
+		if (month.length == 0 || holiday.length == 0 || address.length == 0
+				|| cid.length == 0 || name.length == 0 || content.length == 0) {
+			layer.msg("不能提交空的内容");
+		} else {
+			var table = layui.table;
+			layer.msg("确认提交？", {
+				time : 5000, //20s后自动关闭
+				btn : [ "确定", "取消" ],
+				area : [ '200px', '100px' ],
+				yes : function() {
+					$.post("/LY/addScenery", {
+						cid : cid,
+						name : name,
+						content : content,
+						address : address,
+						holiday : holiday,
+						month : month
+					}, function(res) {
+						if (res > 0) {
+							table.reload("protab");
+							layer.closeAll();
+							layer.msg("提交成功")
+
+						} else {
+							table.reload("protab");
+							layer.closeAll();
+							layer.msg("服务器异常.....");
+						}
+					}, "json")
+				}
+			})
+		}
+	}
+
+	/* 提交 */
+	function addscenery() {
+		layui.use([ "layer", "form", "table" ], function() {
+			var form=layui.form;
+		    $("#getcate").empty();
+		    form.render("select");
+			$.post("/LY/getCategoryAll", {}, function(res) {
+				$.each(res, function(index, item) {
+					form.render("select")
+					var its = '<option value="' + item.cid + '">' + item.cname
+							+ '</option>';
+					$("#getcate").append(its);
+				});
+			}, "json")
+
+			layer.open({
+				type : 1,
+				offset : 'auto',
+				area : [ '610px', '600px' ],
+				content : $("#addscenery"),
+				btn : [ "提交", "关闭" ],
+				yes : function() {
+					addsubmit();
+				},
+				btn2 : function() {
+					close();
+				}
+			});
+		});
+	}
+
+	function edit(d) {
+		layui.use([ "layer", "form", "table" ], function() {
+			var table = layui.table;
+			var layer = layui.layer;
+			var row = table.checkStatus("protab").data[0];
+
+			if (row != null) {
+				if (d == row.id) {
+					document.getElementById("editname").value = row.name;
+					document.getElementById("editcontent").value = row.content;
+					document.getElementById("editmonth").value = row.month;
+					document.getElementById("editaddress").value = row.address;
+					document.getElementById("editholiday").value = row.holiday;
+					layer.open({
+						type : 1,
+						offset : 'auto',
+						area : [ '610px', '600px' ],
+						content : $("#editpro"),
+						btn : [ "提交", "关闭" ],
+						yes : function() {
+
+							editsubmit(row.id);
+
+						},
+						btn2 : function() {
+							close();
+						}
+					});
+				} else {
+					layer.msg("请选择当前数据行")
+				}
+
+			} else {
+				layer.msg("请选中一行数据")
+			}
+		})
+	}
+
+	function editsubmit(id) {
+
+		var table = layui.table;
+		layer.msg("确认提交？", {
+			time : 5000, //20s后自动关闭
+			btn : [ "确定", "取消" ],
+			area : [ '200px', '100px' ],
+			yes : function() {
+				$.post("/LY/editScenery", {
+					id : id,
+					name : $("#editname").val(),
+					content : $("#editcontent").val(),
+					month : $("#editmonth").val(),
+					holiday : $("#editholiday").val(),
+					address : $("#editaddress").val()
+				}, function(res) {
+					if (res > 0) {
+						table.reload("protab");
+						layer.closeAll();
+						layer.msg("更新成功")
+
+					} else {
+						table.reload("protab");
+						layer.closeAll();
+						layer.msg("更新异常.....");
+					}
+				}, "json")
+			}
+		});
+	}
+
+	function close() {
+		layui.use([ "layer", "form", "table" ], function() {
+			layer.closeAll();
+		})
+
+	}
+	function del(d) {
+		var table = layui.table;
+		layer.msg("确认删除？", {
+			time : 5000, //20s后自动关闭
+			btn : [ "删除", "取消" ],
+			area : [ '200px', '100px' ],
+			yes : function() {
+				$.post("/LY/delScenery", {
+					id : d
+				}, function(res) {
+					if (res > 0) {
+						layer.msg("删除成功")
+						table.reload("protab");
+					} else {
+						table.reload("protab");
+						layer.msg("删除失败,该类别下存在有效数据");
+					}
+				}, "json")
+			}
+		});
+	}
+	$(function() {
+		init();
+	});
+
+	function init() {
+		layui
+				.use(
+						[ 'table', 'form', 'laydate' ],
+						function() {
+							var table = layui.table;
+							var form = layui.form;
+							var laydate = layui.laydate;
+							table
+									.render({
+										elem : '#demo' //指定原始表格元素选择器（推荐id选择器）
+										,
+										toolbar : "#toolbar",
+										where : {
+											name : $("#sceneryname").val(),
+											address : $("#sceneryaddress")
+													.val(),
+											month : $("#scenerymonth").val(),
+											holiday : $("#sceneryholiday")
+													.val(),
+											upstarttime : $("#upstarttime")
+													.val(),
+											upendtime : $("#upendtime").val(),
+											publishstarttime : $(
+													"#publishstarttime").val(),
+											publishendtime : $(
+													"#publishendtime").val(),
+											unpublishstarttime : $(
+													"#unpublishstarttime")
+													.val(),
+											unpublishendtime : $(
+													"#unpublishendtime").val(),
+											publishstate : $("#publishstate")
+													.val()
+										},
+										id : "protab",
+										method : "post",
+										loading : true,
+										page : true,
+										url : "/LY/getScenery",
+										height : 500 //容器高度
+										,
+										cols : [ [
+
+												{
+													field : 'id',
+													title : 'ID',
+													width : 45
+												},
+
+												{
+													field : "cname",
+													title : "类别",
+													width : 80,
+													templet : "<div>{{d.category.cname}}</div>"
+
+												},
+												{
+													field : 'name',
+													title : '景点名称',
+													width : 100
+												},
+												{
+													field : 'simg',
+													title : '图片',
+													width : 120,
+													templet : "#scenerysimg"
+												},
+												{
+													field : 'imgcode',
+													title : '图片编码',
+													width : 80
+												},
+												{
+													field : 'publishstate',
+													title : '发布状态',
+													width : 100,
+													templet : "#publishstateyouhua"
+												},
+												{
+													field : 'uptime',
+													title : '上传时间',
+													width : '80'
+												},
+												{
+													field : 'publishtime',
+													title : '上次发布时间',
+													width : '80'
+												},
+												{
+													field : 'address',
+													title : '景点地区',
+													width : 30
+												},
+												{
+													field : 'month',
+													title : '景点月份',
+													width : 60
+												},
+												{
+													field : 'holiday',
+													title : '相关产物',
+													width : 60
+												},
+												{
+													field : 'unpublishtime',
+													title : '上次撤回发布时间',
+													width : '80'
+												},
+												{
+													field : 'content',
+													title : '文章描述',
+													width : 210,
+													templet : "#scenerycontent"
+												},
+												{
+													type : 'radio',
+													width : 60
+												},
+												{
+													field : "asd",
+													title : "操作",
+													width : 130,
+													templet : function(d) {
+														return "<div><a class='layui-btn layui-btn-radius layui-btn-normal'onclick='edit("
+																+ d.id
+																+ ")' >编辑</a><a class='layui-btn layui-btn-radius layui-btn-normal'onclick='del("
+																+ d.id
+																+ ")' >删除</a> </div><div><a class='layui-btn layui-btn-radius layui-btn-normal'onclick='upload("
+																+ d.id
+																+ ")' >上传</a></div>"
+													}
+												} ] ] //设置表头
+										//,…… //更多参数参考右侧目录：基本参数选项
+										,
+										limit : 10,
+										limits : [ 10, 20, 50 ]
+									});
+
+							laydate.render({
+								elem : '#upstarttime'
+							});
+							laydate.render({
+								elem : '#upendtime'
+							});
+							laydate.render({
+								elem : '#publishstarttime'
+							});
+							laydate.render({
+								elem : '#publishendtime'
+							});
+							laydate.render({
+								elem : '#unpublishstarttime'
+							});
+							laydate.render({
+								elem : '#unpublishendtime'
+							});
+
+							form.on("switch(switchptstatus)", function(data) {
+								var selectIfKey = data.othis;
+								var parentTr = selectIfKey.parents("tr");
+								var id = $(parentTr).find("td:eq(0)").find(
+										".layui-table-cell").text();
+								if (data.elem.checked == true) {
+									$.post("/LY/editScenery", {
+										id : id,
+										publishstate : "已发布"
+									}, function(res) {
+										if (res > 0) {
+											layer.msg("已发布");
+
+										} else {
+											editScenery
+											layer.msg("处理异常");
+										}
+
+									}, "json")
+								} else {
+									$.post("/LY/editScenery", {
+										id : id,
+										publishstate : "未发布"
+									}, function(res) {
+										if (res > 0) {
+											layer.msg("已撤回发布");
+										} else {
+											layer.msg("撤回失败.");
+
+										}
+									}, "json")
+								}
+							});
+						})
+	}
+</script>
+
+</html>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.spring.dao.ImagesDao">
+	<resultMap type="Images" id="ImgMap">
+		<id property="id" column="id" />
+		<result property="imgcode" column="imgcode" />
+		<result property="imgurl" column="imgurl" />
+		<result property="istuijian" column="istuijian" />
+		<association property="scenery" javaType="Scenery">
+			<id property="id" column="id" />
+			<result property="name" column="name" />
+			<result property="content" column="content" />
+			<result property="simg" column="simg" />
+			<result property="imgcode" column="imgcode" />
+			<result property="cid" column="cid" />
+			<result property="address" column="address" />
+			<result property="month" column="month" />
+			<result property="holiday" column="holiday" />
+			<result property="uptime" column="uptime" />
+			<result property="publishtime" column="publishtime" />
+			<result property="unpublishtime" column="unpublishtime" />
+			<result property="publishstate" column="publishstate" />
+		</association>
+	</resultMap>
+	<!-- 根据id查询图片 -->
+	<select id="findImgById" parameterType="_int" resultType="Images">
+		SELECT id,imgurl,imgcode,istuijian  FROM `images` where id =#{id}
+	</select>
+	<!-- 查询总条数 -->
+	<select id="getImgsCount" parameterType="fenye"
+		resultType="_int">
+		SELECT count(i.id) FROM `images` i,scenery s
+		<where>
+			s.imgcode=i.imgcode
+			<if test="name !=null and  name !=''">
+				and s.name like "%"#{name}"%"
+			</if>
+			<if test="imgcode !=null and imgcode!=''">
+				and i.imgcode=#{imgcode}
+			</if>
+			<if test="istuijian !=null and istuijian !='' ">
+				and istuijian =#{istuijian}
+			</if>
+		</where>
+	</select>
+	<!-- 查询图片 -->
+	<select id="getImgs" parameterType="fenye" resultMap="ImgMap">
+		SELECT i.id,i.imgurl,i.imgcode,i.istuijian,s.name FROM `images`
+		i,scenery s
+		<where>
+			s.imgcode=i.imgcode
+			<if test="name !=null and  name !=''">
+				and s.name like "%"#{name}"%"
+			</if>
+			<if test="imgcode !=null and imgcode!=''">
+				and i.imgcode=#{imgcode}
+			</if>
+			<if test="istuijian !=null and istuijian !='' ">
+				and i.istuijian =#{istuijian}
+			</if>
+		</where>
+		GROUP BY i.istuijian,i.imgcode,i.id,i.imgurl,s.name
+		ORDER BY id DESC
+		limit #{page},#{limit}
+	</select>
+	<!-- 添加图片 -->
+	<insert id="addImgs" parameterType="Images">
+		insert into
+		images(imgcode,imgurl) value(#{imgcode},#{imgurl})
+	</insert>
+	<!-- 删除 -->
+	<delete id="delImgByid" parameterType="int">
+		delete from images where id=#{id}
+	</delete>
+	<!-- 根据编码删除图片 -->
+	<delete id="delImgByImgCode" parameterType="String">
+		delete from images where imgcode=#{imgcode}
+	</delete>
+	<!-- 设置为轮播图 -->
+	<update id="editImage" parameterType="Images">
+		update images
+		<set>
+			<if test="istuijian !=null and istuijian !=''">
+				istuijian =#{istuijian},
+			</if>
+		</set>
+		<where>
+			<if test="id !=null and id !=''">
+				id=#{id}
+			</if>
+		</where>
+	</update>
+	
+	<!-- 前台/获取轮播图 -->
+	<select id="getlunbo" resultType="Images">
+	SELECT id,imgurl,imgcode,istuijian  FROM `images` where istuijian =1
+	</select>
+	
+	<!--根据imgcode查询图片  -->
+	<select id="findImgByImgCode" parameterType="String" resultType="Images">
+	SELECT id,imgurl,imgcode,istuijian  FROM `images` where imgcode =#{imgcode}
+	</select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.spring.dao.CategoryDao">
+<!-- 查询类别 -->
+	<select id="vgetcategoryandscenery" resultType="Category">
+		select id,cid,cname from category
+	</select>
+	<!-- 获取种类 -->
+	<select id="getCategory" parameterType="Fenye"
+		resultType="Category">
+		SELECT id,cid,cname FROM `category`
+		<where>
+			<if test="cname !=null and cname !='' ">
+				and cname like "%"#{cname}"%"
+			</if>
+		</where>
+		ORDER BY id DESC
+		limit #{page},#{limit}
+	</select>
+	<!-- 根据id查询cid -->
+	<select id="selectCidById" parameterType="int"
+		resultType="String">
+		select cid from category where id=#{id}
+	</select>
+	<!-- 查询 -->
+	<select id="getCategoryAll" resultType="Category">
+		SELECT id,cid,cname FROM
+		`category`
+	</select>
+	<!-- 查询数量 -->
+	<select id="getCategoryCount" parameterType="Fenye"
+		resultType="_int">
+		SELECT count(id) FROM `category`
+		<where>
+			<if test="cname !=null and cname !='' ">
+				and cname like "%"#{cname}"%"
+			</if>
+		</where>
+	</select>
+	<!-- 信息修改 -->
+	<update id="editCategory" parameterType="Category">
+		update category
+		<set>
+			<if test="cname !=null and cname !=''">
+				cname=#{cname},
+			</if>
+		</set>
+		<where>
+			<if test="id !=null and id !=''">
+				and id=#{id}
+			</if>
+		</where>
+	</update>
+	<!-- 刪除 -->
+
+	<delete id="delCategory" parameterType="int">
+		DELETE FROM category
+		where id=#{id}
+	</delete>
+	<!-- 添加 -->
+	<insert id="addCategory" parameterType="Category">
+		INSERT INTO
+		category(cid,cname) VALUE(#{cid},#{cname})
+	</insert>
+</mapper>

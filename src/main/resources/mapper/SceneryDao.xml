@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.spring.dao.SceneryDao">
+	<resultMap type="Scenery" id="SceneryMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="content" column="content" />
+		<result property="simg" column="simg" />
+		<result property="imgcode" column="imgcode" />
+		<result property="cid" column="cid" />
+		<result property="address" column="address" />
+		<result property="month" column="month" />
+		<result property="holiday" column="holiday" />
+		<result property="uptime" column="uptime" />
+		<result property="publishtime" column="publishtime" />
+		<result property="unpublishtime" column="unpublishtime" />
+		<result property="publishstate" column="publishstate" />
+		<association property="category" javaType="Category">
+			<id property="id" column="id" />
+			<result property="cid" column="cid" />
+			<result property="cname" column="cname" />
+		</association>
+	</resultMap>
+	<select id="selectSceneryById" parameterType="int" resultType="Scenery">
+	SELECT id,name,content,simg,imgcode,cid,address,publishstate,uptime,unpublishtime,publishtime,month,holiday
+		FROM
+		`scenery`
+		where id=#{id} 
+	</select>
+	
+	<!-- 查询数据 -->
+	<select id="getScenery" parameterType="fenye"
+		resultMap="SceneryMap">
+		SELECT
+		s.id,name,s.content,s.simg,c.cname,s.imgcode,s.cid,s.address,s.publishstate,s.uptime,s.unpublishtime,s.publishtime,s.month,s.holiday
+		FROM
+		`scenery` s,category c
+		<where>
+			s.cid=c.cid
+			<if test="name !=null and name !=''">
+				and s.name like "%"#{name}"%"
+			</if>
+			<if test="address !=null and address !='' ">
+				and s.address like "%"#{address}"%"
+			</if>
+			<if test="month !=null and month !='' ">
+				and s.month = #{month}
+			</if>
+			<if test="holiday != null and holiday !=''">
+				and s.holiday like "%"#{holiday}"%"
+			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				and s.publishstate = #{publishstate}
+			</if>
+			<if test="upstarttime !=null and upstarttime !='' ">
+				and s.uptime &gt;= #{upstarttime}
+			</if>
+			<if test="upendtime !=null and upendtime !='' ">
+				and s.uptime &lt;= #{upendtime}
+			</if>
+			<if test=" publishstarttime !=null and publishstarttime !=''">
+				and s.publishtime &gt;= #{publishstarttime}
+			</if>
+			<if test=" publishendtime !=null and publishendtime !=''">
+				and s.publishtime &lt;= #{publishendtime}
+			</if>
+			<if test="unpublishstarttime !=null and unpublishstarttime !='' ">
+				and s.unpublishtime &gt;= #{unpublishstarttime}
+			</if>
+			<if test="unpublishendtime !=null and unpublishendtime !='' ">
+				and s.unpublishtime &lt;= #{unpublishendtime}
+			</if>
+		</where>
+		ORDER BY id DESC
+		limit #{page},#{limit}
+	</select>
+	<!-- 查询条数 -->
+	<select id="getSceneryCount" parameterType="fenye"
+		resultType="_int">
+		SELECT count(id) FROM `scenery`
+		<where>
+			<if test="name !=null and name !=''">
+				and name like "%"#{name}"%"
+			</if>
+			<if test="address !=null and address !='' ">
+				and address like "%"#{address}"%"
+			</if>
+			<if test="month !=null and month !='' ">
+				and month =#{month}
+			</if>
+			<if test="holiday != null and holiday !=''">
+				and holiday like "%"#{holiday}"%"
+			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				and publishstate = #{publishstate}
+			</if>
+			<if test="upstarttime !=null and upstarttime !='' ">
+				and uptime &gt;= #{upstarttime}
+			</if>
+			<if test="upendtime !=null and upendtime !='' ">
+				and uptime &lt;= #{upendtime}
+			</if>
+			<if test=" publishstarttime !=null and publishstarttime !=''">
+				and publishtime &gt;= #{publishstarttime}
+			</if>
+			<if test=" publishendtime !=null and publishendtime !=''">
+				and publishtime &lt;= #{publishendtime}
+			</if>
+			<if test="unpublishstarttime !=null and unpublishstarttime !='' ">
+				and unpublishtime &gt;= #{unpublishstarttime}
+			</if>
+			<if test="unpublishendtime !=null and unpublishendtime !='' ">
+				and unpublishtime &lt;= #{unpublishendtime}
+			</if>
+		</where>
+	</select>
+	<!-- 查询CID是否存在 -->
+	<select id="selectIsExitByCid" parameterType="String"
+		resultType="_int">
+		select count(id) from scenery where cid =#{cid}
+	</select>
+	<!-- 根据id查询图片码 -->
+	<select id="selectImgcodeById" parameterType="int"
+		resultType="String">
+		select imgcode from scenery where id =#{id}
+	</select>
+	<select id="getSceneryAll" resultType="Scenery">
+		select
+		id,name,content,simg,imgcode,cid,address,month,holiday FROM `scenery`
+	</select>
+	<!-- 更新 -->
+	<update id="editScenery" parameterType="Scenery">
+		update scenery
+		<set>
+			<if test="name !=null and name !=''">
+				name =#{name} ,
+			</if>
+			<if test="content !=null and content !=''">
+				content =#{content},
+			</if>
+			<if test="simg !=null and simg !='' ">
+				simg =#{simg},
+			</if>
+			<if test="month !=null and month !='' ">
+				month =#{month},
+			</if>
+			<if test="holiday !=null and holiday !='' ">
+				holiday =#{holiday},
+			</if>
+			<if test="address !=null and address !='' ">
+				address =#{address},
+			</if>
+			<if test="publishtime !=null and publishtime !=''">
+				publishtime =#{publishtime},
+			</if>
+			<if test="unpublishtime !=null and unpublishtime !='' ">
+				unpublishtime =#{unpublishtime},
+			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				publishstate =#{publishstate},
+			</if>
+		</set>
+		<where>
+			<if test="id !=null and  id !='' ">
+				and id =#{id}
+			</if>
+		</where>
+	</update>
+	<!-- 添加 -->
+	<insert id="addScenery" parameterType="Scenery">
+		insert into scenery
+		(name,content,cid,imgcode,month,address,holiday,uptime,publishstate)
+		value(#{name},#{content},#{cid},#{imgcode},#{month},#{address},#{holiday},#{uptime},#{publishstate})
+	</insert>
+	<!-- 删除 -->
+	<delete id="delScenery" parameterType="int">
+		DELETE FROM scenery where
+		id=#{id}
+	</delete>
+	<!-- 根据cid查询 -->
+	<select id="vgetSceneryByCid" parameterType="String" resultType="Scenery">
+		SELECT
+		id,name,content,simg,imgcode,cid,address,publishstate,uptime,unpublishtime,publishtime,month,holiday
+		FROM
+		`scenery` 
+	</select>
+	<select id="getSceneryByFenye" parameterType="fenye" resultMap="SceneryMap">
+			SELECT
+		s.id,name,s.content,s.simg,c.id,c.cname,s.imgcode,s.cid,s.address,s.publishstate,s.uptime,s.unpublishtime,s.publishtime,s.month,s.holiday
+		FROM
+		`scenery` s,category c
+		<where>
+			s.cid=c.cid
+			<if test="name !=null and name !=''">
+				and s.name like "%"#{name}"%"
+			</if>
+			<if test="address !=null and address !='' ">
+				and s.address like "%"#{address}"%"
+			</if>
+			<if test="month !=null and month !='' ">
+				and s.month = #{month}
+			</if>
+			<if test="holiday != null and holiday !=''">
+				and s.holiday like "%"#{holiday}"%"
+			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				and s.publishstate = #{publishstate}
+			</if>
+			<if test="upstarttime !=null and upstarttime !='' ">
+				and s.uptime &gt;= #{upstarttime}
+			</if>
+			<if test="upendtime !=null and upendtime !='' ">
+				and s.uptime &lt;= #{upendtime}
+			</if>
+			<if test=" publishstarttime !=null and publishstarttime !=''">
+				and s.publishtime &gt;= #{publishstarttime}
+			</if>
+			<if test=" publishendtime !=null and publishendtime !=''">
+				and s.publishtime &lt;= #{publishendtime}
+			</if>
+			<if test="unpublishstarttime !=null and unpublishstarttime !='' ">
+				and s.unpublishtime &gt;= #{unpublishstarttime}
+			</if>
+			<if test="unpublishendtime !=null and unpublishendtime !='' ">
+				and s.unpublishtime &lt;= #{unpublishendtime}
+			</if>
+			<if test="id !=null and id !='' ">
+				and c.id = #{id}
+			</if>
+		</where>
+	</select>
+</mapper>
