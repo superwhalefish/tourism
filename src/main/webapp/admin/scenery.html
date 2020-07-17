@@ -6,14 +6,14 @@
 <title>商品管理</title>
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<link rel="stylesheet" href="./css/font.css">
-<link rel="stylesheet" href="./css/xadmin.css">
-<link rel="stylesheet" href="css/tabletype.css" />
-<script src="js/vue.js"></script>
-<script src="js/vue-resource.min.js"></script>
-<script src="./lib/layui/layui.js" charset="utf-8"></script>
-<script type="text/javascript" src="./js/xadmin.js"></script>
-<script src="js/jquery.min.js"></script>
+<link rel="stylesheet" href="../css/font.css">
+<link rel="stylesheet" href="../css/xadmin.css">
+<link rel="stylesheet" href="../css/tabletype.css" />
+<script src="../js/vue.js"></script>
+<script src="../js/vue-resource.min.js"></script>
+<script src="../lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../js/xadmin.js"></script>
+<script src="../js/jquery.min.js"></script>
 
 </head>
 
@@ -321,7 +321,7 @@
       <textarea class="layui-textarea" cols="30" rows="3"> {{d.content}}</textarea>
 </script>
 <script type="text/html" id="scenerysimg">
-<img src="path/{{d.simg}}"atl="50">
+<img src="/LY/path/{{d.simg}}"atl="50">
 </script>
 <script type="text/html" id="publishstateyouhua">
 		<input type="checkbox" name="open" value="{{d.publishstate}}" lay-skin="switch" lay-text="已发布|未发布 " lay-filter="switchptstatus" {{ d.publishstate=='已发布' ? 'checked' : '' }} data-id="{{d.id}}">

@@ -31,7 +31,6 @@ public class CategoryController {
 		fenye.setPage((page - 1) * limit);
 		fenye.setLimit(limit);
 		fenye.setCname(cname);
-		System.out.println(fenye);
 		return categoryService.getCategory(fenye);
 
 	}
