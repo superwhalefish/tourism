@@ -84,6 +84,27 @@
 					placeholder="请输入相关产物">
 				</td>
 			</tr>
+			
+				<tr>
+				<td>联系人:<input type="text" id="editlinkman" value=""
+					placeholder="请输入联系人">
+				</td>
+			</tr>
+				<tr>
+				<td>联系电话:<input type="text" id="edittel" value=""
+					placeholder="请输入联系电话">
+				</td>
+			</tr>
+				<tr>
+				<td>自驾:<input type="text" id="editcar" value=""
+					placeholder="请输入自驾路线">
+				</td>
+			</tr>
+				<tr>
+				<td>公交:<input type="text" id="editbus" value=""
+					placeholder="请输入公交路线">
+				</td>
+			</tr>
 			<tr>
 				<td colspan="2">文本描述</td>
 			</tr>
@@ -143,6 +164,28 @@
 					placeholder="请输入景点地区">
 				</td>
 			</tr>
+			<tr>
+				<td>联系人:<input type="text" id="addlinkman" value=""
+					placeholder="请输入联系人">
+				</td>
+			</tr>
+				<tr>
+				<td>联系电话:<input type="text" id="addtel" value=""
+					placeholder="请输入联系电话">
+				</td>
+			</tr>
+				<tr>
+				<td>自驾:<input type="text" id="addcar" value=""
+					placeholder="请输入自驾路线">
+				</td>
+			</tr>
+				<tr>
+				<td>公交:<input type="text" id="addbus" value=""
+					placeholder="请输入公交路线">
+				</td>
+			</tr>
+			
+			
 			<tr>
 				<td colspan="2">文本描述</td>
 			</tr>
@@ -321,7 +364,7 @@
       <textarea class="layui-textarea" cols="30" rows="3"> {{d.content}}</textarea>
 </script>
 <script type="text/html" id="scenerysimg">
-<img src="/LY/path/{{d.simg}}"atl="50">
+<img src="/LY/path/images/{{d.simg}}"atl="50">
 </script>
 <script type="text/html" id="publishstateyouhua">
 		<input type="checkbox" name="open" value="{{d.publishstate}}" lay-skin="switch" lay-text="已发布|未发布 " lay-filter="switchptstatus" {{ d.publishstate=='已发布' ? 'checked' : '' }} data-id="{{d.id}}">
@@ -334,6 +377,10 @@
 		var address = $("#addaddress").val();
 		var holiday = $("#addholiday").val();
 		var month = $("#addmonth").val();
+		var tel=$("#addtel").val();
+		var linkman=$("#addlinkman").val();
+		var car=$("#addcar").val();
+		var bus=$("#addbus").val();
 		if (month.length == 0 || holiday.length == 0 || address.length == 0
 				|| cid.length == 0 || name.length == 0 || content.length == 0) {
 			layer.msg("不能提交空的内容");
@@ -347,6 +394,10 @@
 					$.post("/LY/addScenery", {
 						cid : cid,
 						name : name,
+						tel:tel,
+						linkman:linkman,
+						car:car,
+						bus:bus,
 						content : content,
 						address : address,
 						holiday : holiday,
@@ -412,6 +463,10 @@
 					document.getElementById("editmonth").value = row.month;
 					document.getElementById("editaddress").value = row.address;
 					document.getElementById("editholiday").value = row.holiday;
+					document.getElementById("edittel").value = row.tel;
+					document.getElementById("editlinkman").value = row.linkman;
+					document.getElementById("editcar").value = row.car;
+					document.getElementById("editbus").value = row.bus;
 					layer.open({
 						type : 1,
 						offset : 'auto',
@@ -451,7 +506,11 @@
 					content : $("#editcontent").val(),
 					month : $("#editmonth").val(),
 					holiday : $("#editholiday").val(),
-					address : $("#editaddress").val()
+					address : $("#editaddress").val(),
+					tel:$("#edittel").val(),
+					linkman:$("#editlinkman").val(),
+					car:$("#editcar").val(),
+					bus:$("#editbus").val(),
 				}, function(res) {
 					if (res > 0) {
 						table.reload("protab");
@@ -613,6 +672,26 @@
 													title : '文章描述',
 													width : 210,
 													templet : "#scenerycontent"
+												},
+												{
+													field : 'linkman',
+													title : '联系人',
+													width : 60
+												},
+												{
+													field : 'tel',
+													title : '联系电话',
+													width : 60
+												},
+												{
+													field : 'car',
+													title : '自驾',
+													width : 160
+												},
+												{
+													field : 'bus',
+													title : '公交',
+													width : 160
 												},
 												{
 													type : 'radio',

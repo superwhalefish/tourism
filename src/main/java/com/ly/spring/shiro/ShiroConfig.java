@@ -3,11 +3,16 @@ package com.ly.spring.shiro;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.collections.functors.TruePredicate;
+import org.apache.ibatis.annotations.Property;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 public class ShiroConfig {
@@ -15,7 +20,6 @@ public class ShiroConfig {
 	public ShiroFilterFactoryBean getShiroFilterFactoryBean(
 			@Qualifier("securityManager") DefaultWebSecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-
 		// 安全管理
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 
@@ -48,4 +52,18 @@ public class ShiroConfig {
 		return new UserRealm();
 	}
 
+	/*
+	 * @Bean
+	 * 
+	 * @DependsOn("lifecycleBeanPostProcessor") public static
+	 * DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+	 * DefaultAdvisorAutoProxyCreator creator = new
+	 * DefaultAdvisorAutoProxyCreator(); //这一句比较重要
+	 * creator.setProxyTargetClass(true); return creator;
+	 * 
+	 * }
+	 * 
+	 * @Bean("lifecycleBeanPostProcessor") public LifecycleBeanPostProcessor
+	 * lifecycleBeanPostProcessor() { return new LifecycleBeanPostProcessor(); }
+	 */
 }

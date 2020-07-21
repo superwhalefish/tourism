@@ -79,7 +79,7 @@ private UploadFileUtil uploadFileUtil;
 		//String selectImgcodeById = sceneryDao.selectImgcodeById(id);
 		Scenery selectImgById = sceneryDao.selectSceneryById(id);
 		File file = new File("E:\\images\\"+selectImgById.getSimg());
-		uploadFileUtil.delImg(file);
+		uploadFileUtil.delFile(file);
 	//	Integer delImgByImgCode = imagesDao.delImgByImgCode(selectImgById.getImgcode());
 		imagesService.delImgByImgCode(selectImgById.getImgcode());
 		

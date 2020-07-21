@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.spring.dao.VideoMapper">
+	<!-- 查询视频资源库 -->
+
+	<select id="getVideo" parameterType="Fenye" resultType="Video">
+		SELECT id,v_code,v_time,v_content,v_img,v_state FROM `video`
+		<where>
+			<if test="state !=null and  state !=''">
+				and v_state =#{state}
+			</if>
+			<if test="v_code !=null and v_code !=''">
+			and v_code like "%"#{v_code}"%"
+			</if>
+			<if test="v_time !=null and v_time !=''">
+				and v_time like "%"#{v_time}"%"
+			</if>
+		</where>
+		order by v_time desc
+		limit #{page},#{limit}
+	</select>
+	<!-- 根据v_code查询 -->
+	<select id="findVideoByV_code" parameterType="String" resultType="Video">
+		SELECT id,v_code,v_time,v_content,v_img,v_state FROM `video` where v_code=#{v_code}
+	</select>
+	
+	<!-- 获取数量 -->
+	<select id="getVideoCount" parameterType="Fenye"
+		resultType="_int">
+		SELECT count(id) FROM `video`
+		<where>
+			<if test="state !=null and  state !=''">
+				and v_state =#{state}
+			</if>
+			<if test="v_code !=null and v_code !=''">
+				and v_code like "%"#{v_code}"%"
+			</if>
+			<if test="v_time !=null and v_time !=''">
+				and v_time like "%"#{v_time}"%"
+			</if>
+		</where>
+	</select>
+	<!-- 更新音频信息 -->
+	<update id="editVideoState" parameterType="Video">
+		update  video
+		<set>
+			<if test="v_state !=null and v_state !=''">
+				v_state=#{v_state},
+			</if>
+			<if test="v_content !=null and v_content !=''">
+				v_content =#{v_content},
+			</if>
+			<if test="v_img !=null and v_img !=''">
+				v_img =#{v_img},
+			</if>
+		</set>
+		<where>
+			<if test="v_code !=null and v_code !=''">
+				and v_code =#{v_code}
+			</if>
+		</where>
+	</update>
+	<!-- 添加音频信息 -->
+	<insert id="addVideo" parameterType="Video">
+	insert into video(v_code,v_time,v_content,v_img,v_state) value(#{v_code},#{v_time},#{v_content},#{v_img},#{v_state})
+	</insert>
+	<!-- 删除音频信息 -->
+	<delete id="delViddeoByV_code" parameterType="String">
+	delete from video where v_code=#{v_code}
+	</delete>
+</mapper>

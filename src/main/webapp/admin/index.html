@@ -51,7 +51,6 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">admin</a>
                     <dl class="layui-nav-child">
-                        <!-- 二级菜单 -->
                         <dd>
                             <a onclick="xadmin.open('个人信息','http://www.baidu.com')">个人信息</a></dd>
                         <dd>
@@ -64,9 +63,6 @@
                     <a href="/">前台首页</a></li>
             </ul>
         </div>
-        <!-- 顶部结束 -->
-        <!-- 中部开始 -->
-        <!-- 左侧菜单开始 -->
         <div class="left-nav">
             <div id="side-nav">
                 <ul id="nav">
@@ -91,16 +87,16 @@
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>景区图片信息管理</cite></a>
                             </li>
+                              <li>
+                                <a onclick="xadmin.add_tab('视频管理','shipin.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>景区视频信息管理</cite></a>
+                            </li>
                         </ul>
                     </li>
-                 
                         </ul>
-                
             </div>
         </div>
-        <!-- <div class="x-slide_left"></div> -->
-        <!-- 左侧菜单结束 -->
-        <!-- 右侧主体开始 -->
         <div class="page-content">
             <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
                 <ul class="layui-tab-title">

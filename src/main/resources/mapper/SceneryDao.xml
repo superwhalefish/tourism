@@ -15,6 +15,10 @@
 		<result property="publishtime" column="publishtime" />
 		<result property="unpublishtime" column="unpublishtime" />
 		<result property="publishstate" column="publishstate" />
+		<result property="linkman" column="linkman"/>
+		<result property="tel" column="tel"/>
+		<result property="car" column="car"/>
+		<result property="bus" column="bus"/>
 		<association property="category" javaType="Category">
 			<id property="id" column="id" />
 			<result property="cid" column="cid" />
@@ -22,7 +26,7 @@
 		</association>
 	</resultMap>
 	<select id="selectSceneryById" parameterType="int" resultType="Scenery">
-	SELECT id,name,content,simg,imgcode,cid,address,publishstate,uptime,unpublishtime,publishtime,month,holiday
+	SELECT id,name,content,simg,imgcode,cid,address,publishstate,uptime,unpublishtime,publishtime,month,holiday,linkman,tel,car,bus
 		FROM
 		`scenery`
 		where id=#{id} 
@@ -33,6 +37,7 @@
 		resultMap="SceneryMap">
 		SELECT
 		s.id,name,s.content,s.simg,c.cname,s.imgcode,s.cid,s.address,s.publishstate,s.uptime,s.unpublishtime,s.publishtime,s.month,s.holiday
+		,s.linkman,s.tel,s.car,s.bus
 		FROM
 		`scenery` s,category c
 		<where>
@@ -126,7 +131,8 @@
 	</select>
 	<select id="getSceneryAll" resultType="Scenery">
 		select
-		id,name,content,simg,imgcode,cid,address,month,holiday FROM `scenery`
+		id,name,content,simg,imgcode,cid,address,month,linkman,tel,car,bus,uptime,holiday FROM `scenery`
+		where publishstate ='已发布'
 	</select>
 	<!-- 更新 -->
 	<update id="editScenery" parameterType="Scenery">
@@ -159,6 +165,30 @@
 			<if test="publishstate !=null and publishstate !=''">
 				publishstate =#{publishstate},
 			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				publishstate =#{publishstate},
+			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				publishstate =#{publishstate},
+			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				publishstate =#{publishstate},
+			</if>
+			<if test="publishstate !=null and publishstate !=''">
+				publishstate =#{publishstate},
+			</if>
+			<if test="linkman !=null and linkman !=''">
+			linkman =#{linkman},
+			</if>
+			<if test="tel !=null and tel !=''">
+			tel =#{tel},
+			</if>
+			<if test="car !=null and  car !=''">
+			car =#{car},
+			</if>
+			<if test="bus !=null and bus !=''">
+			bus =#{bus},
+			</if>
 		</set>
 		<where>
 			<if test="id !=null and  id !='' ">
@@ -169,8 +199,8 @@
 	<!-- 添加 -->
 	<insert id="addScenery" parameterType="Scenery">
 		insert into scenery
-		(name,content,cid,imgcode,month,address,holiday,uptime,publishstate)
-		value(#{name},#{content},#{cid},#{imgcode},#{month},#{address},#{holiday},#{uptime},#{publishstate})
+		(name,content,cid,imgcode,month,address,holiday,uptime,publishstate,linkman,tel,car,bus)
+		value(#{name},#{content},#{cid},#{imgcode},#{month},#{address},#{holiday},#{uptime},#{publishstate},#{linkman},#{tel},#{car},#{bus})
 	</insert>
 	<!-- 删除 -->
 	<delete id="delScenery" parameterType="int">

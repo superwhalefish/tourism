@@ -48,8 +48,8 @@ public class ImagesServiceImp implements ImagesService {
 	public Integer delImgByid(Integer id) {
 		// TODO Auto-generated method stub
 		Images img=imagesDao.findImgById(id);
-		File file = new File("E:\\images\\"+img.getImgurl());
-		uploadFileUtil.delImg(file);
+		File file = new File("E:\\expert\\images\\"+img.getImgurl());
+		uploadFileUtil.delFile(file);
 		return imagesDao.delImgByid(id);
 	}
 
@@ -98,13 +98,9 @@ public class ImagesServiceImp implements ImagesService {
 		// TODO Auto-generated method stub
 		List<Images> images=imagesDao.findImgByImgCode(imgcode);
 		for(int i=0;i<images.size();i++) {
-			File file = new File("E:\\images\\"+images.get(i).getImgurl());
-			uploadFileUtil.delImg(file);
+			File file = new File("E:\\expert\\images\\"+images.get(i).getImgurl());
+			uploadFileUtil.delFile(file);
 		}
-//		File file = new File("E:\\eclipsework\\LYTourism\\src\\main\\webapp\\images\\"+selectImgById.getSimg());
-//		uploadFileUtil.delImg(file);
-		//备用图片文件删除
-		
 		return imagesDao.delImgByImgCode(imgcode);
 	}
 }

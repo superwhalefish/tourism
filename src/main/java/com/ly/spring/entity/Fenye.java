@@ -39,9 +39,40 @@ private String publishstate;
 
 //图片images码
 private String imgcode;
+
+//音频编码
+private String v_code;
+//时间
+private String v_time;
+//状态
+private String state;
 private Integer istuijian;
 
 
+
+public String getV_code() {
+	return v_code;
+}
+
+public void setV_code(String v_code) {
+	this.v_code = v_code;
+}
+
+public String getV_time() {
+	return v_time;
+}
+
+public void setV_time(String v_time) {
+	this.v_time = v_time;
+}
+
+public String getState() {
+	return state;
+}
+
+public void setState(String state) {
+	this.state = state;
+}
 
 public Integer getIstuijian() {
 	return istuijian;

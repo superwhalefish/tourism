@@ -18,15 +18,21 @@ private String uptime;
 private String publishtime;
 private String unpublishtime;
 private String publishstate;
+private String linkman;
+private String tel;
+private String car;
+private String bus;
+
 private Category category;
 public Scenery() {
 	super();
 	// TODO Auto-generated constructor stub
 }
 
+
 public Scenery(Integer id, String name, String content, String simg, String imgcode, String cid, String address,
 		String month, String holiday, String uptime, String publishtime, String unpublishtime, String publishstate,
-		Category category) {
+		String linkman, String tel, String car, String bus, Category category) {
 	super();
 	this.id = id;
 	this.name = name;
@@ -41,8 +47,53 @@ public Scenery(Integer id, String name, String content, String simg, String imgc
 	this.publishtime = publishtime;
 	this.unpublishtime = unpublishtime;
 	this.publishstate = publishstate;
+	this.linkman = linkman;
+	this.tel = tel;
+	this.car = car;
+	this.bus = bus;
 	this.category = category;
 }
+
+
+public String getLinkman() {
+	return linkman;
+}
+
+
+public void setLinkman(String linkman) {
+	this.linkman = linkman;
+}
+
+
+public String getTel() {
+	return tel;
+}
+
+
+public void setTel(String tel) {
+	this.tel = tel;
+}
+
+
+public String getCar() {
+	return car;
+}
+
+
+public void setCar(String car) {
+	this.car = car;
+}
+
+
+public String getBus() {
+	return bus;
+}
+
+
+public void setBus(String bus) {
+	this.bus = bus;
+}
+
 
 public String getUptime() {
 	return uptime;
@@ -130,12 +181,15 @@ public void setCategory(Category category) {
 	this.category = category;
 }
 
+
 @Override
 public String toString() {
 	return "Scenery [id=" + id + ", name=" + name + ", content=" + content + ", simg=" + simg + ", imgcode=" + imgcode
 			+ ", cid=" + cid + ", address=" + address + ", month=" + month + ", holiday=" + holiday + ", uptime="
 			+ uptime + ", publishtime=" + publishtime + ", unpublishtime=" + unpublishtime + ", publishstate="
-			+ publishstate + ", category=" + category + "]";
+			+ publishstate + ", linkman=" + linkman + ", tel=" + tel + ", car=" + car + ", bus=" + bus + ", category="
+			+ category + "]";
 }
+
 
 }

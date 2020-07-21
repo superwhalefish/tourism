@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>农教视频</title>
+<link rel="stylesheet" href="../js/layui/css/layui.css">
+<script type="text/javascript" src="../js/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<style type="text/css">
+.layui-table-cell {
+	height: auto !important;
+	white-space: normal;
+}
+</style>
+
+<script type="text/javascript" src="../js/shipin.js">
+	
+</script>
+</head>
+<body>
+
+
+	<table class="layui-hide" id="test"></table>
+	<script type="text/html" id="videotemplet">
+ <video src="/LY/path/mp4/{{d.v_img}}"controls preload="none"  width="260"height="150" poster="/LY/path/img/nong.jpg"> </video> 
+</script>
+	<script type="text/html" id="istuijiantemplet">	
+		<input type="checkbox" name="open" value="{{d.v_state}}" lay-skin="switch" lay-text="yes||no" lay-filter="switchptstatus" {{ d.v_state==1 ? 'checked' : '' }} data-id="{{d.id}}">
+	</script>
+	<script type="text/html" id="toolbar">
+<div class="layui-form-item">
+  <label class="layui-form-label">编码：</label>
+	<div class="layui-input-inline">
+			<input type="text" id="scener_v_code" value="" lay-verify="required|number" autocomplete="off" class="layui-input">
+		</div>
+                <label class="layui-form-label">日期：</label>
+             <div class="layui-input-inline">
+      		  <input type="text" name="search_v_time" id="search_v_time" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>
+     <label class="layui-form-label">推荐：</label>
+             	<div class="layui-input-inline">
+						<select id="scenery_v_state" name="addmonth" lay-verify="required">
+							<option value="">--请选择--</option>
+							<option value="1">--已推荐--</option>
+							<option value="2">--未推荐--</option>
+							
+						</select>
+		</div>
+<a class='layui-btn layui-btn-radius layui-btn-normal' onclick='init()'>搜索</a>
+	<a class='layui-btn layui-btn-radius layui-btn-normal' onclick='addscenery()'>添加</a>
+
+  </div>
+</script>
+	<div id="addvideo" hidden="hidden">
+		<table>
+			<tr>
+				<td colspan="2">
+					<div class="layui-upload">
+						<button type="button" class="layui-btn layui-btn-normal"
+							id="test8">选择文件</button>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">视频简介描述</td>
+			</tr>
+
+			<tr>
+				<td colspan="2"><textarea rows="4" cols="90" id="add_v_content"></textarea></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button type="button" class="layui-btn" id="test9">开始上传</button>
+				</td>
+			</tr>
+		</table>
+		<script type="text/html" id="sceneryv_content">
+      <textarea disabled="disabled" class="layui-textarea" cols="30" rows="3"> {{d.v_content}}</textarea>
+</script>
+	</div>
+
+	<!-- 编辑框 -->
+	<div hidden="hidden" id="editvideo">
+		<table>
+			<tr>
+				<td colspan="2"><textarea id="edit_v_content"
+						class="layui-textarea" cols="60" rows="9"></textarea></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
